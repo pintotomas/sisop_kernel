@@ -11,7 +11,9 @@ void vga_write(const char *s, int8_t linea, uint8_t color){
     }
 
     //else
-    buf += linea*160;
+
+    buf += 160*linea;
+
     int pos = 0;
     while (s[pos] != '\0') {
         *buf++ = s[pos];
