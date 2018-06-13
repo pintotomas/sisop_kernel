@@ -1,22 +1,16 @@
-CPPFLAGS := -nostdinc -idirafter lib
-
-GCC_PATH := /usr/lib/gcc/x86_64-linux-gnu/5
-CPPFLAGS += -I$(GCC_PATH)/include -I$(GCC_PATH)/include-fixed
-
-
-
 CFLAGS := -g -std=c99 -Wall -Wextra -Wpedantic
-CFLAGS += -m32 -O1 -ffreestanding
-
+CFLAGS += -m32 -O1 -fasm -ffreestanding  
+CPPFLAGS := -nostdinc -idirafter lib
+CPPFLAGS += -I$(GCC_PATH)/include -I$(GCC_PATH)/include-fixed
+LIBGCC := $(shell $(CC) $(CFLAGS) -print-libgcc-file-name)
 SRCS := $(wildcard *.c lib/*.c) # usar wildcard *.c
 OBJS :=  $(patsubst src/,,$(SRCS:.c=.o)) # usar patsubst sobre SRCS
-
 QEMU := qemu-system-i386 -serial mon:stdio
 KERN ?= kern2
 BOOT := -kernel $(KERN) $(QEMU_EXTRA)
 
 kern2: boot.o $(OBJS)
-	ld -m elf_i386 -Ttext 0x100000 --entry ???? $^ -o $@
+	ld -m elf_i386 -Ttext 0x100000 $^ $(LIBGCC) -o $@
 	# Verificar imagen Multiboot v1.
 	grub-file --is-x86-multiboot $@
 
@@ -33,6 +27,6 @@ gdb:
 	gdb -q -s kern2 -n -ex 'target remote 127.0.0.1:7508'
 
 clean:
-	rm -f kern2 *.o core
+	rm -f kern2 *.o lib/*.o core
 
 .PHONY: qemu qemu-gdb gdb
