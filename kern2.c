@@ -56,11 +56,11 @@ static uint8_t stack2[USTACK_SIZE] __attribute__((aligned(4096)));
 
 void two_stacks_c() {
     // Inicializar al *tope* de cada pila.
-    //uintptr_t *a = ...
-    //uintptr_t *b = ...
+    uintptr_t *a = (uintptr_t*) (stack1 + USTACK_SIZE);
+    uintptr_t *b = (uintptr_t*) (stack2 + USTACK_SIZE);
 
     // Preparar, en stack1, la llamada:
-    vga_write("vga_write() from stack1", 15, 0x57);
+    //vga_write("vga_write() from stack1", 15, 0x57);
 
     // AYUDA 1: se puede usar alguna forma de pre- o post-
     // incremento/decremento, según corresponda:
@@ -76,7 +76,7 @@ void two_stacks_c() {
     //   ... a ... = (uintptr_t) "vga_write() from stack1";
 
     // Preparar, en s2, la llamada:
-    vga_write("vga_write() from stack2", 16, 0xD0);
+    //vga_write("vga_write() from stack2", 16, 0xD0);
 
     // AYUDA 3: para esta segunda llamada, usar esta forma de
     // asignación alternativa:
@@ -95,6 +95,3 @@ void two_stacks_c() {
   //      : /* no outputs */
   //      : "r"(s2), "r"(vga_write));
 }
-
-
-
