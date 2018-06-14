@@ -32,7 +32,8 @@ void kmain(const multiboot_info_t *mbi) {
     }
 vga_write(memoria, 10, 0x07);
 
-
+    two_stacks();
+    
     while (1){
         __asm__("hlt");
     }
