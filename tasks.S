@@ -3,8 +3,8 @@
 task_exec:
         push %ebp
         movl %esp, %ebp
-        movl 8(%ebp), %esp
-        call *12(%ebp)
+        movl 12(%ebp), %esp
+        call *8(%ebp)
         movl %ebp, %esp
         leave
         ret
