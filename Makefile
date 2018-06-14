@@ -1,5 +1,5 @@
 CFLAGS := -g -std=c99 -Wall -Wextra -Wpedantic
-CFLAGS += -m32 -O1 -fasm -ffreestanding  
+CFLAGS += -m32 -O1 -fasm -ffreestanding -fno-omit-frame-pointer
 CPPFLAGS := -nostdinc -idirafter lib
 CPPFLAGS += -I$(GCC_PATH)/include -I$(GCC_PATH)/include-fixed
 LIBGCC := $(shell $(CC) $(CFLAGS) -print-libgcc-file-name)
