@@ -56,8 +56,8 @@ static uint8_t stack2[USTACK_SIZE] __attribute__((aligned(4096)));
 
 void two_stacks_c() {
     // Inicializar al *tope* de cada pila.
-    uintptr_t *a = (uintptr_t*) (stack1 + USTACK_SIZE);
-    uintptr_t *b = (uintptr_t*) (stack2 + USTACK_SIZE);
+    uintptr_t *a = (uintptr_t*) (stack1+USTACK_SIZE);
+    uintptr_t *b = (uintptr_t*) (stack2+USTACK_SIZE);
 
     // Preparar, en stack1, la llamada:
     //vga_write("vga_write() from stack1", 15, 0x57);
@@ -69,6 +69,20 @@ void two_stacks_c() {
     //     *(++a) = ...
     //     *(a--) = ...
     //     *(--a) = ...
+
+    //Ahora estamos en el tope de la pila y se que 'crece hacia arriba'
+    //Por lo tanto asignaria con *(a--), *(--a) hace un preincremento y creo
+    //que estaria perdiendo espacio
+    //Paso los stacks de manera inversa
+    *(a--) = 0x57; 
+    *(a--) = 15;  
+    *(a--) = (uintptr_t) "vga_write() from stack1"; 
+    
+    
+    //Primera llamada usando task_exec().
+    //Supongo que con s1 quisieron poner a?
+    task_exec((uintptr_t) vga_write, (uintptr_t) a);
+    
 
     // AYUDA 2: para apuntar a la cadena con el mensaje,
     // es suficiente con el siguiente cast:
@@ -85,9 +99,6 @@ void two_stacks_c() {
     //b[1] = ...
     //b[2] = ...
 
-    // Primera llamada usando task_exec().
-    //task_exec((uintptr_t) vga_write, (uintptr_t) s1);
-
     // Segunda llamada con ASM directo. Importante: no
     // olvidar restaurar el valor de %esp al terminar, y
     // compilar con: -fasm -fno-omit-frame-pointer.
@@ -95,3 +106,4 @@ void two_stacks_c() {
   //      : /* no outputs */
   //      : "r"(s2), "r"(vga_write));
 }
+
