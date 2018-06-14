@@ -71,12 +71,10 @@ void two_stacks_c() {
     //     *(--a) = ...
 
     //Ahora estamos en el tope de la pila y se que 'crece hacia arriba'
-    //Por lo tanto asignaria con *(a--), *(--a) hace un preincremento y creo
-    //que estaria perdiendo espacio
     //Paso los stacks de manera inversa
-    *(a--) = 0x57; 
-    *(a--) = 15;  
-    *(a--) = (uintptr_t) "vga_write() from stack1"; 
+    *(--a) = 0x57; 
+    *(--a) = 15;  
+    *(--a) = (uintptr_t) "vga_write() from stack1"; 
     
     
     //Primera llamada usando task_exec().
@@ -106,4 +104,3 @@ void two_stacks_c() {
   //      : /* no outputs */
   //      : "r"(s2), "r"(vga_write));
 }
-
