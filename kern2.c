@@ -96,11 +96,16 @@ void two_stacks_c() {
     //b[0] = ...
     //b[1] = ...
     //b[2] = ...
-
+    b -= 3;
+    b[0] = (uintptr_t) "vga_write() from stack2";
+    b[1] = 16;
+    b[2] = 0xD0;
+    
     // Segunda llamada con ASM directo. Importante: no
     // olvidar restaurar el valor de %esp al terminar, y
     // compilar con: -fasm -fno-omit-frame-pointer.
   //  asm("...; call *%1; ..."
   //      : /* no outputs */
   //      : "r"(s2), "r"(vga_write));
+  asm("movl %%esp,%%esi; movl %0,%%esp; call *%1; movl %%esi,%%esp":: "r"(&(b[0])), "r" (vga_write));
 }
