@@ -61,44 +61,5 @@ two_stacks:
         leave
         ret
 
-
-.globl task_swap
-task_swap:
-      //En esp esta la dirección de memoria donde se encuentra el stack dormido
-      // Lo almaceno en ecx
-      pop %ecx
-      // Lo almaceno en eax desde el stack actual
-      pop %eax
-      
-      
-      
-      //En el stack actual guardo los registros called-saved
-      //push %EBX
-      //push %EDI
-      //push %ESI 
-      
-      push %ecx // proxima instruccion antes de la llamada 
-      movl %ecx, %esi
-      
-      // Guardo el stack actual en un registro auxiliar ecx
-      movl %esp,%ecx
-      
-      // cambio el stack actual por el dormido
-      movl (%eax), %esp
-      
-      //Copio en la variable esp el stack que se va a dormir
-      movl %ecx, (%eax)
-
-      // En orden inverso recupero los registros called-saved del proceso dormido
-      //pop %EBX
-      //pop %EDI
-      
-      movl %esi, %ecx 
-      pop %ESI
-      //pop %EDX
-      push %ecx
-      
-      ret
-
       
         
