@@ -56,7 +56,7 @@ void kmain(const multiboot_info_t *mbi) {
     : "=a"(linea), "=c"(color)
     : "0"(18), "1"(0xE0), "b"(0), "d"(0));
 
-    vga_write2("Funciona vga_write2?", 18, 0xE0);
+    vga_write2("Funciona vga_write2?", linea, color);
     //Kern2-swap
     contador_run();
     

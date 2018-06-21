@@ -111,8 +111,8 @@ divzero:
     push %eax
     // Preparo los argumentos para la llamada vga_write_cyan
 
-    movl $17, %edx //Primer argumento
-    movl $msg_div, %eax //Segundo argumento
+    movl $17, %edx //Segundo arg
+    movl $msg_div, %eax //Primer arg
 
     //Invocar a la funcion que imprime
     call vga_write_cyan
