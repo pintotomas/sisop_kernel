@@ -26,7 +26,7 @@ static void contador_yield(unsigned lim, uint8_t linea, char color) {
         unsigned p = 0;
         unsigned long long i = 0;
 
-        while (i++ < DELAY(8))  // Usar un entero menor si va demasiado lento.
+        while (i++ < DELAY(6))  // Usar un entero menor si va demasiado lento.
             ;
 
         while (counter[p] == '9') {
