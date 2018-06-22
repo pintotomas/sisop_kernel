@@ -16,6 +16,12 @@ static void yield() {
         task_swap(&esp);
 }
 
+static void exit() {
+    uintptr_t tmp = esp;
+    esp = 0;
+    task_swap(&tmp);
+}
+
 static void contador_yield(unsigned lim, uint8_t linea, char color) {
     char counter[COUNTLEN] = {'0'};  // ASCII digit counter (RTL).
 
@@ -43,6 +49,7 @@ static void contador_yield(unsigned lim, uint8_t linea, char color) {
         }
 
         yield();
+        
     }
 }
 
@@ -60,9 +67,9 @@ void contador_run() {
     b -= 3;
     b[2] = 0x4F;
     b[1] = 1;
-    b[0] = 100;
-
-    *(--b) = 0; //return falso
+    b[0] = 95;
+    *(--b) = (uintptr_t) exit;
+    //*(--b) = 0; //return falso
 
     // Hacemos de cuenta que el swap es uno de muchos anteriores
     *(--b) = (uintptr_t)contador_yield;
