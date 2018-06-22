@@ -69,8 +69,8 @@ void irq_init() {
 
 static unsigned ticks;
 
-void timer() {
+/*void timer() {
     if (++ticks == 15) {
         vga_write("Transcurrieron 15 ticks", 20, 0x07);
     }
-}
+}*/
