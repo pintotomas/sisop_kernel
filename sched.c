@@ -54,10 +54,13 @@ void spawn(void (*entry)(void)) {
     tf->eflags = 0x200; // noveno bit encendido comenzando desde el bit 0
     
     /*
-    tf->cs = ;
-    
-    
+    Supongo hay que seguir respetando esta aclaración en inerrupts.c
+    // Multiboot siempre define "8" como el segmento de código.
+    // (Ver campo CS en `info registers` de QEMU.)
+    static const uint8_t KSEG_CODE = 8;
     */
+
+    tf->cs = 8;
 }
 
 void sched(struct TaskFrame *tf) {
