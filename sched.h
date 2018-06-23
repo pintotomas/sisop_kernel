@@ -15,3 +15,4 @@ struct Task {
     struct TaskFrame *frame;
 };
 
+void sched_init();
