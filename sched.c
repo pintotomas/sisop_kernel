@@ -7,9 +7,12 @@ static struct Task Tasks[MAX_TASK];
 static struct Task *current;
 
 void sched_init() {
-    /*Esta función debe inicializar la variable global current al primer elemento del arreglo global de tareas, 
-    y poner su estado en RUNNING.*/
-    Tasks[0].status = RUNNING; 
+    //La primer tarea debe encontrarse en 'running'
+    Tasks[0].status = RUNNING;
+    //El resto las pongo como FREE
+    for (int i = 1; i < MAX_TASK; i++){
+        Tasks[i].status = FREE;
+    } 
 }
 
 void spawn(void (*entry)(void)) {
@@ -19,4 +22,3 @@ void spawn(void (*entry)(void)) {
 void sched(struct TaskFrame *tf) {
     // ...
 }
-
