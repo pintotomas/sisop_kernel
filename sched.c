@@ -49,10 +49,14 @@ void spawn(void (*entry)(void)) {
     tf->eax = 0;
     tf->padding = 0;
     //Quedan por inicializar cs,eip,eflags, y la stack dentro de free_task?
+    
+    tf->eip = (uint32_t) entry;
+    tf->eflags = 0x200; // noveno bit encendido comenzando desde el bit 0
+    
     /*
     tf->cs = ;
-    tf->eip = ;
-    tf->eflags = ;
+    
+    
     */
 }
 
