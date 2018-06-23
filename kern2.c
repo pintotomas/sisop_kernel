@@ -45,6 +45,8 @@ void kmain(const multiboot_info_t *mbi) {
     two_stacks();
     two_stacks_c();
     
+    //llamar a sched_init() antes de idt_init y irq_init
+    //sched_init()
     // Código ejercicio kern2-idt.
     idt_init();   // (a)
     irq_init();   // Nueva función.
