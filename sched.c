@@ -19,13 +19,16 @@ void sched_init() {
 
 void spawn(void (*entry)(void)) {
     //1. Encontrarn el el arreglo global Tasks, una entrada con estado FREE
-    Task *free_task;
+    struct Task *free_task;
     for (int i = 1; i < MAX_TASK; i++){
         if(Tasks[i].status == FREE){
-            free_task = Tasks[i];
+            free_task = &Tasks[i];
             break;            
         }
     } 
+    //2. Cambiar su status a READY
+    free_task->status = READY;
+
 }
 
 void sched(struct TaskFrame *tf) {
