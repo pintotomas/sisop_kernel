@@ -1,6 +1,7 @@
 #include "decls.h"
 #include "multiboot.h"
 #include "lib/string.h"
+#include "sched.h"
 
 #define USTACK_SIZE 4096
 
