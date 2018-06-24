@@ -20,13 +20,8 @@ void sched_init() {
 void spawn(void (*entry)(void)) {
     //1. Encontrarn el el arreglo global Tasks, una entrada con estado FREE
     struct Task *free_task = NULL;
-    for (int i = 1; i < MAX_TASK; i++){
-        if(Tasks[i].status == FREE){
-            free_task = &Tasks[i];
-            break;            
-        }
-        return;
-    } 
+    int iFree = findTaskStatus(0, FREE);
+    free_task = &Tasks[iFree];
 
     //2. Cambiar su status a READY
     free_task->status = READY;
@@ -73,7 +68,7 @@ void spawn(void (*entry)(void)) {
 
 int findRR(){
     int iRunning = findTaskStatus( 0, RUNNING );
-    int index = findTaskStatus( index, READY );
+    int index = findTaskStatus( iRunning, READY );
     if(index == MAX_TASK){
         index = findTaskStatus( 0, READY );
     }
@@ -103,7 +98,7 @@ void sched(struct TaskFrame *tf) {
         current = new;
         current->status = RUNNING;
 
-        asm("movl %0, %%esp\n"
+        asm volatile("movl %0, %%esp\n"
         "popa\n"
         "iret\n"
         :
