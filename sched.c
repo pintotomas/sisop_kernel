@@ -25,10 +25,6 @@ void spawn(void (*entry)(void)) {
 
     //2. Cambiar su status a READY
     free_task->status = READY;
-    if (free_task->status == READY){
-        vga_write("Todo bien", 8, 0x70);
-    } 
-
     
     uint8_t* stackEnd = &(free_task->stack[4096]);
 
