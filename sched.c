@@ -69,15 +69,17 @@ void spawn(void (*entry)(void)) {
 int findRR(){
     int iRunning = findTaskStatus( 0, RUNNING );
     int index = findTaskStatus( iRunning, READY );
-    if(index == MAX_TASK){
-        index = findTaskStatus( 0, READY );
-    }
+
     return (index == MAX_TASK)? -1 : index;
 }
 
 
 int findTaskStatus(int index, enum TaskStatus status){
+    int initialIndex = index;
     while(Tasks[index].status != status && index < MAX_TASK) index++;
+    if(initialIndex > 0){
+        while(Tasks[0].status != status && index < initialIndex) index++;
+    }
     return index;
 }
 
