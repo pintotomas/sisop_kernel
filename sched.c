@@ -34,11 +34,19 @@ void spawn(void (*entry)(void)) {
         vga_write("Todo bien", 8, 0x70);
     } 
 
+    
+    uint8_t* stackEnd = &(free_task->stack[4096]);
+
+    size_t sizeTaskFrame = sizeof(struct TaskFrame);  
+    uint8_t* taskMem = stackEnd - sizeTaskFrame; //Decremento en la memoria el tamaño del struct
+    struct TaskFrame* tf = (struct TaskFrame *) (taskMem);
+    
     //3. Inicializar todos sus registros a cero, excepto %cs, %eip y %eflags.
     //   En particular %eflags debe contener el flag IF, o las interrupciones de reloj
     //   no se habilitarán al entrar la tarea en ejecución.
 
-    struct TaskFrame *tf = free_task->frame;
+    
+    free_task->frame = tf;
     tf->edi = 0;
     tf->esi = 0;
     tf->ebp = 0;
@@ -50,9 +58,8 @@ void spawn(void (*entry)(void)) {
     tf->padding = 0;
     //Quedan por inicializar cs,eip,eflags, y la stack dentro de free_task?
     
-    tf->eip = (uint32_t) entry;
     tf->eflags = 0x200; // noveno bit encendido comenzando desde el bit 0
-    
+    tf->eip = (uint32_t) entry;
     /*
     Supongo hay que seguir respetando esta aclaración en inerrupts.c
     // Multiboot siempre define "8" como el segmento de código.
@@ -61,8 +68,49 @@ void spawn(void (*entry)(void)) {
     */
 
     tf->cs = 8;
+    
+}
+
+int findRR(){
+    int iRunning = findTaskStatus( 0, RUNNING );
+    int index = findTaskStatus( index, READY );
+    if(index == MAX_TASK){
+        index = findTaskStatus( 0, READY );
+    }
+    return (index == MAX_TASK)? -1 : index;
+}
+
+
+int findTaskStatus(int index, enum TaskStatus status){
+    while(Tasks[index].status != status && index < MAX_TASK) index++;
+    return index;
 }
 
 void sched(struct TaskFrame *tf) {
-    // ...
+    struct Task *new = 0;
+    struct Task *old = current;
+
+
+    vga_write("SCHEDULING......", 8, 0x80);
+    int iNext = findRR();
+    if ( iNext > 0 ){
+        new = &Tasks[iNext];
+
+
+        old->status = READY;
+        old->frame =tf;
+
+        current = new;
+        current->status = RUNNING;
+
+        asm("movl %0, %%esp\n"
+        "popa\n"
+        "iret\n"
+        :
+        : "g"(current->frame)
+        : "memory");      
+    }
+
+
+    
 }

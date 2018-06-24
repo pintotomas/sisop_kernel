@@ -61,7 +61,8 @@ void kmain(const multiboot_info_t *mbi) {
 
     vga_write2("Funciona vga_write2?", linea, color);
     //Kern2-swap
-    contador_run();
+    contador_spawn();
+    //contador_run();
     
     
     while (1){
@@ -129,3 +130,6 @@ void two_stacks_c() {
   //      : "r"(s2), "r"(vga_write));
   asm("movl %%esp,%%esi; movl %0,%%esp; call *%1; movl %%esi,%%esp":: "r"(&(b[0])), "r" (vga_write));
 }
+
+
+

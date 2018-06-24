@@ -1,8 +1,8 @@
 enum TaskStatus {
     FREE = 0,
-    READY,
-    RUNNING,
-    DYING,
+    READY = 1,
+    RUNNING = 2,
+    DYING = 3
 };
 
 struct TaskFrame {
