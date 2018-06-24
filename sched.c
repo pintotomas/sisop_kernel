@@ -77,8 +77,9 @@ int findRR(){
 int findTaskStatus(int index, enum TaskStatus status){
     int initialIndex = index;
     while(Tasks[index].status != status && index < MAX_TASK) index++;
-    if(initialIndex > 0){
-        while(Tasks[0].status != status && index < initialIndex) index++;
+    if(initialIndex > 0 && index == MAX_TASK){
+        index=0;
+        while(Tasks[index].status != status && index < initialIndex) index++;
     }
     return index;
 }
@@ -90,7 +91,7 @@ void sched(struct TaskFrame *tf) {
 
     vga_write("SCHEDULING......", 8, 0x80);
     int iNext = findRR();
-    if ( iNext > 0 ){
+    if ( iNext >= 0 ){
         new = &Tasks[iNext];
 
 
