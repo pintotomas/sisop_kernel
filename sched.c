@@ -17,6 +17,12 @@ void sched_init() {
 
 }
 
+
+static void task_kill() {
+    current->status = DYING;
+    sched(NULL);
+}
+
 void spawn(void (*entry)(void)) {
     //1. Encontrarn el el arreglo global Tasks, una entrada con estado FREE
     struct Task *free_task = NULL;
@@ -37,7 +43,6 @@ void spawn(void (*entry)(void)) {
     //   no se habilitarán al entrar la tarea en ejecución.
 
     
-    free_task->frame = tf;
     tf->edi = 0;
     tf->esi = 0;
     tf->ebp = 0;
@@ -47,10 +52,11 @@ void spawn(void (*entry)(void)) {
     tf->ecx = 0;
     tf->eax = 0;
     tf->padding = 0;
-    //Quedan por inicializar cs,eip,eflags, y la stack dentro de free_task?
-    
+   
     tf->eflags = 0x200; // noveno bit encendido comenzando desde el bit 0
     tf->eip = (uint32_t) entry;
+    tf->kill_fn = (uint32_t) task_kill;
+    
     /*
     Supongo hay que seguir respetando esta aclaración en inerrupts.c
     // Multiboot siempre define "8" como el segmento de código.
@@ -58,9 +64,12 @@ void spawn(void (*entry)(void)) {
     static const uint8_t KSEG_CODE = 8;
     */
 
-    tf->cs = 8;
+    tf->cs = 8;	
+    free_task->frame = tf;
     
 }
+
+
 
 int findRR(){
     int iRunning = findTaskStatus( 0, RUNNING );

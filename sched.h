@@ -6,6 +6,8 @@ enum TaskStatus {
 };
 
 struct TaskFrame {
+
+    
     uint32_t edi;
     uint32_t esi;
     uint32_t ebp;
@@ -19,6 +21,8 @@ struct TaskFrame {
     uint16_t cs;
     uint16_t padding;
     uint32_t eflags;
+    uint32_t kill_fn;
+
 } __attribute__((packed));
 
 
